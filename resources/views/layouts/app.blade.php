@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ get_template_directory_uri() }}/images/icon-ckia-favicon.png">
+    <link rel="icon" href="{{ get_template_directory_uri() }}/public/images/icon-ckia-favicon.png">
     @php(do_action('get_header'))
     @php(wp_head())
     @vite(['resources/css/app.css', 'resources/js/app.js'])

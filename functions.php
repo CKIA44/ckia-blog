@@ -22,6 +22,21 @@ require $composer;
 
 /*
 |--------------------------------------------------------------------------
+| Acorn Storage Path
+|--------------------------------------------------------------------------
+|
+| Point Acorn's cache/storage at wp-content/uploads/acorn which is
+| guaranteed to be writable on any WordPress install, including
+| managed / cPanel shared hosting environments.
+|
+*/
+
+if (! defined('ACORN_STORAGE_PATH')) {
+    define('ACORN_STORAGE_PATH', WP_CONTENT_DIR . '/uploads/acorn');
+}
+
+/*
+|--------------------------------------------------------------------------
 | Register The Bootloader
 |--------------------------------------------------------------------------
 |
