@@ -37,6 +37,24 @@ if (! defined('ACORN_STORAGE_PATH')) {
 
 /*
 |--------------------------------------------------------------------------
+| Acorn Error Handler Guard
+|--------------------------------------------------------------------------
+|
+| Prevent "headers already sent" warnings (from plugins that output early
+| when WP_DEBUG is on) from cascading into a fatal via Acorn's error handler.
+| The warning is always a symptom of an earlier problem, never the root cause.
+|
+*/
+
+add_filter('acorn/throw_error_exception', function ($throw, $e) {
+    if (str_contains($e->getMessage(), 'Cannot modify header information')) {
+        return false;
+    }
+    return $throw;
+}, 10, 2);
+
+/*
+|--------------------------------------------------------------------------
 | Register The Bootloader
 |--------------------------------------------------------------------------
 |
