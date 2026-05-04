@@ -59,6 +59,20 @@ if (! defined('ACORN_STORAGE_PATH')) {
     define('ACORN_STORAGE_PATH', WP_CONTENT_DIR . '/uploads/acorn');
 }
 
+// Defining ACORN_STORAGE_PATH bypasses Acorn's own directory-creation logic,
+// so we create the required subdirectories here instead.
+foreach ([
+    ACORN_STORAGE_PATH . '/framework/cache/data',
+    ACORN_STORAGE_PATH . '/framework/views',
+    ACORN_STORAGE_PATH . '/framework/sessions',
+    ACORN_STORAGE_PATH . '/logs',
+] as $_acorn_dir) {
+    if (! is_dir($_acorn_dir)) {
+        @mkdir($_acorn_dir, 0755, true);
+    }
+}
+unset($_acorn_dir);
+
 /*
 |--------------------------------------------------------------------------
 | Acorn Error Handler Guard
