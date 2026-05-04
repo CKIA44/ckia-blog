@@ -55,12 +55,12 @@ $_ckia_step('autoloader loaded');
 |
 */
 
+// Use the theme's own storage/ dir — guaranteed writable since PHP creates boot-test.log here.
+// wp-content/uploads/ may be restricted by open_basedir or suexec on this host.
 if (! defined('ACORN_STORAGE_PATH')) {
-    define('ACORN_STORAGE_PATH', WP_CONTENT_DIR . '/uploads/acorn');
+    define('ACORN_STORAGE_PATH', __DIR__ . '/storage');
 }
 
-// Defining ACORN_STORAGE_PATH bypasses Acorn's own directory-creation logic,
-// so we create the required subdirectories here instead.
 foreach ([
     ACORN_STORAGE_PATH . '/framework/cache/data',
     ACORN_STORAGE_PATH . '/framework/views',
@@ -68,10 +68,13 @@ foreach ([
     ACORN_STORAGE_PATH . '/logs',
 ] as $_acorn_dir) {
     if (! is_dir($_acorn_dir)) {
-        @mkdir($_acorn_dir, 0755, true);
+        $result = mkdir($_acorn_dir, 0755, true);
+        $_ckia_step("mkdir {$_acorn_dir}: " . ($result ? 'OK' : 'FAILED'));
+    } else {
+        $_ckia_step("dir exists: $_acorn_dir");
     }
 }
-unset($_acorn_dir);
+unset($_acorn_dir, $result);
 
 /*
 |--------------------------------------------------------------------------
