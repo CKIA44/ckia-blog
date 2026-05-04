@@ -3,6 +3,27 @@
 use App\Providers\ThemeServiceProvider;
 use Roots\Acorn\Application;
 
+// ── Diagnostics (remove after debugging) ─────────────────────────────────────
+$_ckia_log = __DIR__ . '/boot-test.log';
+$_ckia_step = function (string $msg) use ($_ckia_log) {
+    file_put_contents($_ckia_log, date('c') . " $msg\n", FILE_APPEND);
+};
+set_error_handler(function ($severity, $message, $file, $line) use ($_ckia_log) {
+    file_put_contents($_ckia_log, date('c') . " PHP error($severity): $message in $file:$line\n", FILE_APPEND);
+    return false; // let WordPress handle it too
+});
+register_shutdown_function(function () use ($_ckia_log) {
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        file_put_contents($_ckia_log, date('c') . " FATAL: {$e['message']} in {$e['file']}:{$e['line']}\n", FILE_APPEND);
+    }
+});
+// ─────────────────────────────────────────────────────────────────────────────
+
+@ini_set('memory_limit', '256M');
+
+$_ckia_step('start');
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -15,10 +36,13 @@ use Roots\Acorn\Application;
 */
 
 if (! file_exists($composer = __DIR__.'/vendor/autoload.php')) {
+    $_ckia_step('ERROR: vendor/autoload.php missing');
     wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'sage'));
 }
 
+$_ckia_step('autoloader found');
 require $composer;
+$_ckia_step('autoloader loaded');
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +77,8 @@ add_filter('acorn/throw_error_exception', function ($throw, $e) {
     return $throw;
 }, 10, 2);
 
+$_ckia_step('filters registered');
+
 /*
 |--------------------------------------------------------------------------
 | Register The Bootloader
@@ -65,11 +91,17 @@ add_filter('acorn/throw_error_exception', function ($throw, $e) {
 |
 */
 
-Application::configure()
-    ->withProviders([
-        ThemeServiceProvider::class,
-    ])
-    ->boot();
+try {
+    Application::configure()
+        ->withProviders([
+            ThemeServiceProvider::class,
+        ])
+        ->boot();
+    $_ckia_step('acorn boot() called OK');
+} catch (\Throwable $e) {
+    $_ckia_step('acorn boot() EXCEPTION: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    throw $e;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -83,12 +115,16 @@ Application::configure()
 |
 */
 
+$_ckia_step('loading theme files');
 collect(['setup', 'filters', 'ckia'])
-    ->each(function ($file) {
+    ->each(function ($file) use ($_ckia_step) {
+        $_ckia_step("  including app/{$file}.php");
         if (! locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(
                 /* translators: %s is replaced with the relative file path */
                 sprintf(__('Error locating <code>%s</code> for inclusion.', 'ckia'), $file)
             );
         }
+        $_ckia_step("  app/{$file}.php OK");
     });
+$_ckia_step('functions.php complete');
