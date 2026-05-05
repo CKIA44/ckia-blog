@@ -5,13 +5,14 @@
 
       {{-- Column 1: Brand --}}
       <div class="site-footer__col site-footer__col--brand">
+        @php($ckia_logo = function_exists('get_field') ? get_field('site_logo', 'option') : null)
         <a href="{{ home_url('/') }}" class="site-footer__logo-link" aria-label="CKIA homepage">
           <img
-            src="{{ get_template_directory_uri() }}/images/ckia-mark-nav.png"
-            alt="CKIA"
+            src="{{ $ckia_logo['url'] ?? get_template_directory_uri() . '/public/images/ckia-mark-nav.png' }}"
+            alt="{{ $ckia_logo['alt'] ?? 'CKIA' }}"
             class="site-footer__logo"
-            width="80"
-            height="32"
+            width="{{ $ckia_logo['width'] ?? 80 }}"
+            height="{{ $ckia_logo['height'] ?? 32 }}"
           >
         </a>
         <p class="site-footer__tagline">
