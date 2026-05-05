@@ -72,6 +72,71 @@
   });
 })();
 
+// ── Dropdown nav (keyboard + touch) ───────────────────────────────────────────
+(function initDropdownNav() {
+  const items = document.querySelectorAll('.site-nav__item--has-dropdown');
+  if (!items.length) return;
+
+  function close(item) {
+    item.classList.remove('is-open');
+    const link = item.querySelector('.site-nav__link');
+    if (link) link.setAttribute('aria-expanded', 'false');
+  }
+
+  function open(item) {
+    item.classList.add('is-open');
+    const link = item.querySelector('.site-nav__link');
+    if (link) link.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeAll(except) {
+    items.forEach(item => { if (item !== except) close(item); });
+  }
+
+  items.forEach(item => {
+    const link = item.querySelector('.site-nav__link');
+    if (!link) return;
+
+    // Touch: first tap opens dropdown, second tap follows the link
+    link.addEventListener('click', (e) => {
+      // On desktop (fine pointer) let CSS hover handle it — only intercept touch/coarse
+      if (window.matchMedia('(hover: hover)').matches) return;
+      const isOpen = item.classList.contains('is-open');
+      closeAll(item);
+      if (!isOpen) {
+        e.preventDefault();
+        open(item);
+      }
+    });
+
+    // Keyboard: Enter/Space toggles when the link has a dropdown
+    link.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const isOpen = item.classList.contains('is-open');
+        e.preventDefault();
+        closeAll(item);
+        if (!isOpen) open(item); else close(item);
+      }
+      if (e.key === 'Escape') { close(item); link.focus(); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        open(item);
+        item.querySelector('.site-nav__dropdown-link')?.focus();
+      }
+    });
+  });
+
+  // Trap Escape in dropdown
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll(null);
+  });
+
+  // Click outside closes
+  document.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('.site-nav__item--has-dropdown')) closeAll(null);
+  }, { capture: true });
+})();
+
 // ── Reading progress bar ───────────────────────────────────────────────────────
 (function initReadingProgress() {
   const bar = document.querySelector('.reading-progress__bar');

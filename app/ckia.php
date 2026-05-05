@@ -10,19 +10,54 @@ namespace App;
 
 class CkiaNavWalker extends \Walker_Nav_Menu
 {
+    private const CHEVRON = '<svg class="site-nav__chevron" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    public function start_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= '<ul class="site-nav__dropdown" role="list">';
+    }
+
+    public function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= '</ul>';
+    }
+
     public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0)
     {
-        $classes   = (array) ($data_object->classes ?? []);
-        $is_active = in_array('current-menu-item', $classes, true)
-                  || in_array('current-menu-ancestor', $classes, true);
+        $classes      = (array) ($data_object->classes ?? []);
+        $is_active    = in_array('current-menu-item', $classes, true)
+                     || in_array('current-menu-ancestor', $classes, true);
+        $has_children = in_array('menu-item-has-children', $classes, true);
 
-        $link_class = 'site-nav__link' . ($is_active ? ' site-nav__link--active' : '');
-        $aria       = $is_active ? ' aria-current="page"' : '';
+        if ($depth === 0) {
+            $item_class = 'site-nav__item'
+                        . ($has_children ? ' site-nav__item--has-dropdown' : '')
+                        . ($is_active    ? ' site-nav__item--active'       : '');
+            $link_class = 'site-nav__link' . ($is_active ? ' site-nav__link--active' : '');
+            $aria       = $is_active ? ' aria-current="page"' : '';
+            if ($has_children) {
+                $aria .= ' aria-haspopup="true" aria-expanded="false"';
+            }
 
-        $output .= '<li class="site-nav__item">'
-                 . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
-                 . esc_html($data_object->title)
-                 . '</a></li>';
+            $output .= '<li class="' . esc_attr($item_class) . '">'
+                     . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
+                     . esc_html($data_object->title)
+                     . ($has_children ? self::CHEVRON : '')
+                     . '</a>';
+        } else {
+            $link_class = 'site-nav__dropdown-link' . ($is_active ? ' site-nav__dropdown-link--active' : '');
+            $aria       = $is_active ? ' aria-current="page"' : '';
+
+            $output .= '<li>'
+                     . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
+                     . esc_html($data_object->title)
+                     . '</a>';
+        }
+    }
+
+    public function end_el(&$output, $data_object, $depth = 0, $args = null)
+    {
+        $output .= '</li>';
     }
 }
 
