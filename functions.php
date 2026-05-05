@@ -23,6 +23,17 @@ register_shutdown_function(function () use ($_ckia_log) {
         file_put_contents($_ckia_log, date('c') . " FATAL: {$e['message']} in {$e['file']}:{$e['line']}\n", FILE_APPEND);
     }
 });
+// Wrap WordPress's exception handler so uncaught exceptions are logged
+set_exception_handler(function ($e) use ($_ckia_log) {
+    file_put_contents(
+        $_ckia_log,
+        date('c') . " UNCAUGHT EXCEPTION (" . get_class($e) . "): " . $e->getMessage() .
+        " in " . $e->getFile() . ":" . $e->getLine() . "\n",
+        FILE_APPEND
+    );
+    restore_exception_handler(); // hand back to WordPress
+    throw $e;
+});
 // ─────────────────────────────────────────────────────────────────────────────
 
 @ini_set('memory_limit', '256M');
