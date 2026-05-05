@@ -2,7 +2,9 @@
   <div class="site-header__inner">
 
     <a class="site-header__logo" href="{{ home_url('/') }}" aria-label="CKIA — Cruising Know It All, go to homepage">
-      @php($ckia_logo = function_exists('get_field') ? get_field('site_logo', 'option') : null)
+      @php
+        $ckia_logo = function_exists('get_field') ? get_field('site_logo', 'option') : null;
+      @endphp
       <img
         src="{{ $ckia_logo['url'] ?? get_template_directory_uri() . '/public/images/ckia-mark-nav.png' }}"
         alt="{{ $ckia_logo['alt'] ?? 'CKIA' }}"
