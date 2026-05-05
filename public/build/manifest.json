@@ -4,7 +4,7 @@
     "src": "editor.deps.json"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DJnWUn3a.css",
+    "file": "assets/app--7o9DP-2.css",
     "name": "app",
     "names": [
       "app.css"
@@ -19,7 +19,7 @@
     ]
   },
   "resources/css/editor.css": {
-    "file": "assets/editor-DXO6xwjB.css",
+    "file": "assets/editor-D6FMVcM-.css",
     "name": "editor",
     "names": [
       "editor.css"
@@ -44,7 +44,7 @@
     "src": "resources/fonts/PlayfairDisplay-VariableFont_wght.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app-YyYZ885H.js",
+    "file": "assets/app-B_p82luR.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
