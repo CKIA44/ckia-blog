@@ -13,49 +13,15 @@
     </a>
 
     <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
-      <ul class="site-nav__list" role="list">
-
-        <li class="site-nav__item">
-          <a
-            href="/reviews"
-            class="site-nav__link{{ request()->is('reviews*') ? ' site-nav__link--active' : '' }}"
-            @if(request()->is('reviews*')) aria-current="page" @endif
-          >Reviews</a>
-        </li>
-
-        <li class="site-nav__item">
-          <a
-            href="/tips"
-            class="site-nav__link{{ request()->is('tips*') ? ' site-nav__link--active' : '' }}"
-            @if(request()->is('tips*')) aria-current="page" @endif
-          >Tips</a>
-        </li>
-
-        <li class="site-nav__item">
-          <a
-            href="/destinations"
-            class="site-nav__link{{ request()->is('destinations*') ? ' site-nav__link--active' : '' }}"
-            @if(request()->is('destinations*')) aria-current="page" @endif
-          >Destinations</a>
-        </li>
-
-        <li class="site-nav__item">
-          <a
-            href="/lines"
-            class="site-nav__link{{ request()->is('lines*') ? ' site-nav__link--active' : '' }}"
-            @if(request()->is('lines*')) aria-current="page" @endif
-          >Cruise lines</a>
-        </li>
-
-        <li class="site-nav__item">
-          <a
-            href="/about"
-            class="site-nav__link{{ request()->is('about*') ? ' site-nav__link--active' : '' }}"
-            @if(request()->is('about*')) aria-current="page" @endif
-          >About</a>
-        </li>
-
-      </ul>
+      @php
+        wp_nav_menu([
+          'theme_location' => 'primary_navigation',
+          'container'      => false,
+          'items_wrap'     => '<ul class="site-nav__list" role="list">%3$s</ul>',
+          'walker'         => new \App\CkiaNavWalker(),
+          'fallback_cb'    => false,
+        ]);
+      @endphp
     </nav>
 
     <div class="site-header__actions">

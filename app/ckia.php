@@ -6,6 +6,37 @@
 
 namespace App;
 
+// ── Nav walkers ───────────────────────────────────────────────────────────────
+
+class CkiaNavWalker extends \Walker_Nav_Menu
+{
+    public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0)
+    {
+        $classes   = (array) ($data_object->classes ?? []);
+        $is_active = in_array('current-menu-item', $classes, true)
+                  || in_array('current-menu-ancestor', $classes, true);
+
+        $link_class = 'site-nav__link' . ($is_active ? ' site-nav__link--active' : '');
+        $aria       = $is_active ? ' aria-current="page"' : '';
+
+        $output .= '<li class="site-nav__item">'
+                 . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
+                 . esc_html($data_object->title)
+                 . '</a></li>';
+    }
+}
+
+class CkiaFooterNavWalker extends \Walker_Nav_Menu
+{
+    public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0)
+    {
+        $output .= '<li>'
+                 . '<a href="' . esc_url($data_object->url) . '" class="site-footer__nav-link">'
+                 . esc_html($data_object->title)
+                 . '</a></li>';
+    }
+}
+
 // ── Newsletter form handler ───────────────────────────────────────────────────
 
 add_action('admin_post_newsletter_subscribe', function () {
