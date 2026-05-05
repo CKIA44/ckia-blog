@@ -1,40 +1,42 @@
 <?php
 
-// ── PHP-level error log (remove after debugging) ──────────────────────────────
-ini_set('error_log', __DIR__ . '/php-errors.log');
-error_reporting(E_ALL);
+// ── PHP-level error log — uncomment to debug ─────────────────────────────────
+// ini_set('error_log', __DIR__ . '/php-errors.log');
+// error_reporting(E_ALL);
 // ─────────────────────────────────────────────────────────────────────────────
 
 use App\Providers\ThemeServiceProvider;
 use Roots\Acorn\Application;
 
-// ── Diagnostics (remove after debugging) ─────────────────────────────────────
-$_ckia_log = __DIR__ . '/boot-test.log';
-$_ckia_step = function (string $msg) use ($_ckia_log) {
-    file_put_contents($_ckia_log, date('c') . " $msg\n", FILE_APPEND);
-};
-set_error_handler(function ($severity, $message, $file, $line) use ($_ckia_log) {
-    file_put_contents($_ckia_log, date('c') . " PHP error($severity): $message in $file:$line\n", FILE_APPEND);
-    return false; // let WordPress handle it too
-});
-register_shutdown_function(function () use ($_ckia_log) {
-    $e = error_get_last();
-    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
-        file_put_contents($_ckia_log, date('c') . " FATAL: {$e['message']} in {$e['file']}:{$e['line']}\n", FILE_APPEND);
-    }
-});
-// Wrap WordPress's exception handler so uncaught exceptions are logged
-set_exception_handler(function ($e) use ($_ckia_log) {
-    file_put_contents(
-        $_ckia_log,
-        date('c') . " UNCAUGHT EXCEPTION (" . get_class($e) . "): " . $e->getMessage() .
-        " in " . $e->getFile() . ":" . $e->getLine() . "\n",
-        FILE_APPEND
-    );
-    restore_exception_handler(); // hand back to WordPress
-    throw $e;
-});
+// ── Diagnostics — uncomment entire block to debug ────────────────────────────
+// $_ckia_log = __DIR__ . '/boot-test.log';
+// $_ckia_step = function (string $msg) use ($_ckia_log) {
+//     file_put_contents($_ckia_log, date('c') . " $msg\n", FILE_APPEND);
+// };
+// set_error_handler(function ($severity, $message, $file, $line) use ($_ckia_log) {
+//     file_put_contents($_ckia_log, date('c') . " PHP error($severity): $message in $file:$line\n", FILE_APPEND);
+//     return false;
+// });
+// register_shutdown_function(function () use ($_ckia_log) {
+//     $e = error_get_last();
+//     if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+//         file_put_contents($_ckia_log, date('c') . " FATAL: {$e['message']} in {$e['file']}:{$e['line']}\n", FILE_APPEND);
+//     }
+// });
+// set_exception_handler(function ($e) use ($_ckia_log) {
+//     file_put_contents(
+//         $_ckia_log,
+//         date('c') . " UNCAUGHT EXCEPTION (" . get_class($e) . "): " . $e->getMessage() .
+//         " in " . $e->getFile() . ":" . $e->getLine() . "\n",
+//         FILE_APPEND
+//     );
+//     restore_exception_handler();
+//     throw $e;
+// });
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Stub so $_ckia_step calls below are no-ops when diagnostics are off
+$_ckia_step = function (string $msg) {};
 
 @ini_set('memory_limit', '256M');
 
