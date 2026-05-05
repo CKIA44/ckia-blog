@@ -7,7 +7,8 @@
     Variables: $post (WP_Post), $author (array), $related (array of WP_Post), $tocSections (array)
   --}}
 
-  @while(have_posts()) @php(the_post())
+  @while(have_posts())
+  @php(the_post())
 
   @php
     $post          = get_post();
