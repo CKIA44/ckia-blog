@@ -1,10 +1,10 @@
 {
   "editor.deps.json": {
-    "file": "assets/editor.deps-DxpY22xl.json",
+    "file": "assets/editor.deps.DxpY22xl.json",
     "src": "editor.deps.json"
   },
   "resources/css/app.css": {
-    "file": "assets/app--7o9DP-2.css",
+    "file": "assets/app.Bnb1_ell.css",
     "name": "app",
     "names": [
       "app.css"
@@ -12,14 +12,14 @@
     "src": "resources/css/app.css",
     "isEntry": true,
     "assets": [
-      "assets/Inter-VariableFont_opsz_wght-c8O0ljhh.ttf",
-      "assets/Inter-Italic-VariableFont_opsz_wght-B-9PvMw6.ttf",
-      "assets/PlayfairDisplay-VariableFont_wght-Cl-XvBsO.ttf",
-      "assets/PlayfairDisplay-Italic-VariableFont_wght-1BGmD3Ln.ttf"
+      "assets/Inter-VariableFont_opsz_wght.c8O0ljhh.ttf",
+      "assets/Inter-Italic-VariableFont_opsz_wght.B-9PvMw6.ttf",
+      "assets/PlayfairDisplay-VariableFont_wght.Cl-XvBsO.ttf",
+      "assets/PlayfairDisplay-Italic-VariableFont_wght.1BGmD3Ln.ttf"
     ]
   },
   "resources/css/editor.css": {
-    "file": "assets/editor-D6FMVcM-.css",
+    "file": "assets/editor.D6FMVcM-.css",
     "name": "editor",
     "names": [
       "editor.css"
@@ -28,29 +28,29 @@
     "isEntry": true
   },
   "resources/fonts/Inter-Italic-VariableFont_opsz_wght.ttf": {
-    "file": "assets/Inter-Italic-VariableFont_opsz_wght-B-9PvMw6.ttf",
+    "file": "assets/Inter-Italic-VariableFont_opsz_wght.B-9PvMw6.ttf",
     "src": "resources/fonts/Inter-Italic-VariableFont_opsz_wght.ttf"
   },
   "resources/fonts/Inter-VariableFont_opsz_wght.ttf": {
-    "file": "assets/Inter-VariableFont_opsz_wght-c8O0ljhh.ttf",
+    "file": "assets/Inter-VariableFont_opsz_wght.c8O0ljhh.ttf",
     "src": "resources/fonts/Inter-VariableFont_opsz_wght.ttf"
   },
   "resources/fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf": {
-    "file": "assets/PlayfairDisplay-Italic-VariableFont_wght-1BGmD3Ln.ttf",
+    "file": "assets/PlayfairDisplay-Italic-VariableFont_wght.1BGmD3Ln.ttf",
     "src": "resources/fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf"
   },
   "resources/fonts/PlayfairDisplay-VariableFont_wght.ttf": {
-    "file": "assets/PlayfairDisplay-VariableFont_wght-Cl-XvBsO.ttf",
+    "file": "assets/PlayfairDisplay-VariableFont_wght.Cl-XvBsO.ttf",
     "src": "resources/fonts/PlayfairDisplay-VariableFont_wght.ttf"
   },
   "resources/js/app.js": {
-    "file": "assets/app-B_p82luR.js",
+    "file": "assets/app.DlFt-fs8.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/js/editor.js": {
-    "file": "assets/editor-DRWDEw-3.js",
+    "file": "assets/editor.MUGYaJsF.js",
     "name": "editor",
     "src": "resources/js/editor.js",
     "isEntry": true
