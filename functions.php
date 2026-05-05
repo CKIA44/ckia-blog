@@ -1,5 +1,10 @@
 <?php
 
+// ── PHP-level error log (remove after debugging) ──────────────────────────────
+ini_set('error_log', __DIR__ . '/php-errors.log');
+error_reporting(E_ALL);
+// ─────────────────────────────────────────────────────────────────────────────
+
 use App\Providers\ThemeServiceProvider;
 use Roots\Acorn\Application;
 
