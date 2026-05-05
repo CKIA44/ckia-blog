@@ -10,7 +10,7 @@
   $postId      = $post->ID;
   $title       = $post->post_title;
   $permalink   = get_permalink($post);
-  $thumbUrl    = get_post_thumbnail_url($postId, 'large');
+  $thumbUrl    = get_the_post_thumbnail_url($postId, 'large');
   $date        = get_the_date('M j', $post);
   $readMins    = get_post_meta($postId, '_read_minutes', true);
   $eyebrowRaw  = get_post_meta($postId, '_eyebrow', true);

@@ -4,7 +4,7 @@
   $postId      = $article->ID;
   $title       = $article->post_title;
   $permalink   = get_permalink($article);
-  $thumbUrl    = get_post_thumbnail_url($postId, 'full');
+  $thumbUrl    = get_the_post_thumbnail_url($postId, 'full');
   $eyebrowRaw  = get_post_meta($postId, '_eyebrow', true);
   $summary     = get_post_meta($postId, '_summary', true) ?: get_the_excerpt($article);
 
