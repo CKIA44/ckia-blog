@@ -6,6 +6,172 @@
 
 namespace App;
 
+// ── Nav walkers ───────────────────────────────────────────────────────────────
+
+class CkiaNavWalker extends \Walker_Nav_Menu
+{
+    private const CHEVRON = '<svg class="site-nav__chevron" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    public function start_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= '<ul class="site-nav__dropdown" role="list">';
+    }
+
+    public function end_lvl(&$output, $depth = 0, $args = null)
+    {
+        $output .= '</ul>';
+    }
+
+    public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0)
+    {
+        $classes      = (array) ($data_object->classes ?? []);
+        $is_active    = in_array('current-menu-item', $classes, true)
+                     || in_array('current-menu-ancestor', $classes, true);
+        $has_children = in_array('menu-item-has-children', $classes, true);
+
+        if ($depth === 0) {
+            $item_class = 'site-nav__item'
+                        . ($has_children ? ' site-nav__item--has-dropdown' : '')
+                        . ($is_active    ? ' site-nav__item--active'       : '');
+            $link_class = 'site-nav__link' . ($is_active ? ' site-nav__link--active' : '');
+            $aria       = $is_active ? ' aria-current="page"' : '';
+            if ($has_children) {
+                $aria .= ' aria-haspopup="true" aria-expanded="false"';
+            }
+            $output .= '<li class="' . esc_attr($item_class) . '">'
+                     . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
+                     . esc_html($data_object->title)
+                     . ($has_children ? self::CHEVRON : '')
+                     . '</a>';
+        } else {
+            $link_class = 'site-nav__dropdown-link' . ($is_active ? ' site-nav__dropdown-link--active' : '');
+            $aria       = $is_active ? ' aria-current="page"' : '';
+            $output .= '<li>'
+                     . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
+                     . esc_html($data_object->title)
+                     . '</a>';
+        }
+    }
+
+    public function end_el(&$output, $data_object, $depth = 0, $args = null)
+    {
+        $output .= '</li>';
+    }
+}
+
+class CkiaFooterNavWalker extends \Walker_Nav_Menu
+{
+    public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0)
+    {
+        $output .= '<li>'
+                 . '<a href="' . esc_url($data_object->url) . '" class="site-footer__nav-link">'
+                 . esc_html($data_object->title)
+                 . '</a>';
+    }
+
+    public function end_el(&$output, $data_object, $depth = 0, $args = null)
+    {
+        $output .= '</li>';
+    }
+}
+
+// ── Dropdown nav: inline CSS (no Vite build required) ────────────────────────
+
+add_action('wp_head', function () {
+    echo '<style id="ckia-nav-dropdown">
+.site-nav__item{position:relative}
+.site-nav__link{display:inline-flex;align-items:center;gap:4px}
+.site-nav__chevron{flex-shrink:0;transition:transform 120ms cubic-bezier(.2,.8,.2,1)}
+.site-nav__item--has-dropdown:hover .site-nav__chevron,
+.site-nav__item--has-dropdown:focus-within .site-nav__chevron{transform:rotate(180deg)}
+.site-nav__dropdown{
+  list-style:none;margin:0;padding:8px 0;
+  position:absolute;top:calc(100% + 10px);left:50%;
+  transform:translateX(-50%) translateY(-6px);
+  min-width:210px;background:#fff;
+  border:1px solid #D8E4EC;border-radius:8px;
+  box-shadow:0 8px 24px rgba(15,76,107,.09);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 120ms ease,visibility 120ms ease,transform 120ms ease;
+  z-index:200
+}
+.site-nav__item--has-dropdown:hover .site-nav__dropdown,
+.site-nav__item--has-dropdown:focus-within .site-nav__dropdown{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0)
+}
+.site-nav__dropdown-link{
+  display:block;padding:9px 16px;
+  font-family:inherit;font-size:14px;font-weight:400;
+  color:#0F4C6B;text-decoration:none;white-space:nowrap;
+  transition:background 100ms ease,color 100ms ease
+}
+.site-nav__dropdown-link:hover{background:#F5F9FC;color:#0A2F42}
+.site-nav__dropdown-link--active{color:#0F4C6B;font-weight:500}
+@media(max-width:640px){
+  .site-nav__item--has-dropdown{flex-direction:column;align-items:flex-start}
+  .site-nav__chevron{display:none}
+  .site-nav__dropdown{
+    position:static;transform:none;
+    opacity:1;visibility:visible;pointer-events:auto;
+    box-shadow:none;border:none;
+    border-left:2px solid #D8E4EC;border-radius:0;
+    padding:4px 0;margin-left:12px;background:transparent
+  }
+  .site-nav__dropdown-link{padding:6px 12px;white-space:normal}
+}
+</style>' . "\n";
+}, 20);
+
+// ── Dropdown nav: inline JS (no Vite build required) ─────────────────────────
+
+add_action('wp_footer', function () {
+    echo '<script id="ckia-nav-dropdown-js">
+(function(){
+  var items=document.querySelectorAll(".site-nav__item--has-dropdown");
+  if(!items.length)return;
+  function close(el){
+    el.classList.remove("is-open");
+    var a=el.querySelector(".site-nav__link");
+    if(a)a.setAttribute("aria-expanded","false");
+  }
+  function open(el){
+    el.classList.add("is-open");
+    var a=el.querySelector(".site-nav__link");
+    if(a)a.setAttribute("aria-expanded","true");
+  }
+  function closeAll(skip){items.forEach(function(el){if(el!==skip)close(el);});}
+  items.forEach(function(item){
+    var link=item.querySelector(".site-nav__link");
+    if(!link)return;
+    link.addEventListener("click",function(e){
+      if(window.matchMedia("(hover:hover)").matches)return;
+      var isOpen=item.classList.contains("is-open");
+      closeAll(item);
+      if(!isOpen){e.preventDefault();open(item);}
+    });
+    link.addEventListener("keydown",function(e){
+      if(e.key==="Enter"||e.key===" "){
+        var isOpen=item.classList.contains("is-open");
+        e.preventDefault();closeAll(item);
+        isOpen?close(item):open(item);
+      }
+      if(e.key==="Escape"){close(item);link.focus();}
+      if(e.key==="ArrowDown"){
+        e.preventDefault();open(item);
+        var first=item.querySelector(".site-nav__dropdown-link");
+        if(first)first.focus();
+      }
+    });
+  });
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll(null);});
+  document.addEventListener("pointerdown",function(e){
+    if(!e.target.closest(".site-nav__item--has-dropdown"))closeAll(null);
+  },true);
+})();
+</script>' . "\n";
+}, 20);
+
 // ── Newsletter form handler ───────────────────────────────────────────────────
 
 add_action('admin_post_newsletter_subscribe', function () {
