@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/tomdwy5/cruisingknowitall.com/wp-content/themes/ckia-theme
+    - /bin/bash -c "rm -f $DEPLOYPATH/storage/framework/views/*.php"
