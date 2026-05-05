@@ -140,16 +140,142 @@ add_action('acf/init', function () {
         'redirect'   => false,
     ]);
 
+    // Site Identity
     acf_add_local_field_group([
-        'key'    => 'group_ckia_theme_options',
-        'title'  => 'Theme Options',
+        'key'    => 'group_ckia_identity',
+        'title'  => 'Site Identity',
         'fields' => [
             [
-                'key'     => 'field_voyana_prominence',
-                'label'   => 'Voyana CTA prominence',
-                'name'    => 'voyana_prominence',
-                'type'    => 'select',
-                'choices' => [
+                'key'           => 'field_ckia_site_logo',
+                'label'         => 'Site logo',
+                'name'          => 'site_logo',
+                'type'          => 'image',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'instructions'  => 'Recommended: PNG with transparency, at least 160 × 64 px. Leave blank to use the default CKIA mark.',
+            ],
+            [
+                'key'          => 'field_ckia_site_tagline',
+                'label'        => 'Site tagline',
+                'name'         => 'site_tagline',
+                'type'         => 'text',
+                'placeholder'  => 'Honest cruising advice.',
+                'instructions' => 'Short phrase shown in the footer and meta description.',
+            ],
+        ],
+        'location'   => [[['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']]],
+        'menu_order' => 0,
+    ]);
+
+    // Social Links
+    acf_add_local_field_group([
+        'key'    => 'group_ckia_social',
+        'title'  => 'Social Links',
+        'fields' => [
+            [
+                'key'         => 'field_ckia_social_instagram',
+                'label'       => 'Instagram URL',
+                'name'        => 'social_instagram',
+                'type'        => 'url',
+                'placeholder' => 'https://instagram.com/ckia',
+            ],
+            [
+                'key'         => 'field_ckia_social_twitter',
+                'label'       => 'Twitter / X URL',
+                'name'        => 'social_twitter',
+                'type'        => 'url',
+                'placeholder' => 'https://x.com/ckia',
+            ],
+            [
+                'key'         => 'field_ckia_social_youtube',
+                'label'       => 'YouTube URL',
+                'name'        => 'social_youtube',
+                'type'        => 'url',
+                'placeholder' => 'https://youtube.com/@ckia',
+            ],
+            [
+                'key'         => 'field_ckia_social_facebook',
+                'label'       => 'Facebook URL',
+                'name'        => 'social_facebook',
+                'type'        => 'url',
+                'placeholder' => 'https://facebook.com/ckia',
+            ],
+        ],
+        'location'   => [[['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']]],
+        'menu_order' => 10,
+    ]);
+
+    // Newsletter Block
+    acf_add_local_field_group([
+        'key'    => 'group_ckia_newsletter_copy',
+        'title'  => 'Newsletter Block',
+        'fields' => [
+            [
+                'key'          => 'field_ckia_newsletter_heading',
+                'label'        => 'Heading',
+                'name'         => 'newsletter_heading',
+                'type'         => 'text',
+                'placeholder'  => 'Get the honest truth about cruising.',
+                'instructions' => 'Main headline for the newsletter signup section.',
+            ],
+            [
+                'key'         => 'field_ckia_newsletter_subheading',
+                'label'       => 'Subheading',
+                'name'        => 'newsletter_subheading',
+                'type'        => 'textarea',
+                'rows'        => 2,
+                'placeholder' => 'No fluff, no sponsored puff pieces — just real advice from real cruisers.',
+            ],
+            [
+                'key'           => 'field_ckia_newsletter_button',
+                'label'         => 'Button label',
+                'name'          => 'newsletter_button_label',
+                'type'          => 'text',
+                'placeholder'   => 'Subscribe free',
+                'default_value' => 'Subscribe free',
+            ],
+        ],
+        'location'   => [[['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']]],
+        'menu_order' => 20,
+    ]);
+
+    // Footer
+    acf_add_local_field_group([
+        'key'    => 'group_ckia_footer',
+        'title'  => 'Footer',
+        'fields' => [
+            [
+                'key'         => 'field_ckia_footer_tagline',
+                'label'       => 'Footer tagline',
+                'name'        => 'footer_tagline',
+                'type'        => 'text',
+                'placeholder' => 'Honest cruising advice since 2024.',
+            ],
+            [
+                'key'          => 'field_ckia_footer_copyright',
+                'label'        => 'Copyright line',
+                'name'         => 'footer_copyright',
+                'type'         => 'text',
+                'placeholder'  => '© 2025 CKIA. All rights reserved.',
+                'instructions' => 'Leave blank to auto-generate "© [year] CKIA."',
+            ],
+        ],
+        'location'   => [[['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']]],
+        'menu_order' => 30,
+    ]);
+
+    // Voyana Integration
+    acf_add_local_field_group([
+        'key'    => 'group_ckia_voyana',
+        'title'  => 'Voyana Integration',
+        'fields' => [
+            [
+                'key'           => 'field_voyana_prominence',
+                'label'         => 'Voyana CTA prominence',
+                'name'          => 'voyana_prominence',
+                'type'          => 'select',
+                'choices'       => [
                     'subtle' => 'Subtle (hidden)',
                     'medium' => 'Medium (sky background)',
                     'strong' => 'Strong (deep ocean)',
@@ -157,8 +283,7 @@ add_action('acf/init', function () {
                 'default_value' => 'medium',
             ],
         ],
-        'location' => [
-            [['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']],
-        ],
+        'location'   => [[['param' => 'options_page', 'operator' => '==', 'value' => 'ckia-settings']]],
+        'menu_order' => 40,
     ]);
 });
