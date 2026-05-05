@@ -10,15 +10,6 @@ if (! process.env.APP_URL) {
 
 export default defineConfig({
   base: '/app/themes/sage/public/build/',
-  build: {
-    rollupOptions: {
-      output: {
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash][extname]',
-      },
-    },
-  },
   plugins: [
     tailwindcss(),
     laravel({

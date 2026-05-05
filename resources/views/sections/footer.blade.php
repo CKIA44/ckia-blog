@@ -5,9 +5,7 @@
 
       {{-- Column 1: Brand --}}
       <div class="site-footer__col site-footer__col--brand">
-        @php
-          $ckia_logo = function_exists('get_field') ? get_field('site_logo', 'option') : null;
-        @endphp
+        @php($ckia_logo = function_exists('get_field') ? get_field('site_logo', 'option') : null)
         <a href="{{ home_url('/') }}" class="site-footer__logo-link" aria-label="CKIA homepage">
           <img
             src="{{ $ckia_logo['url'] ?? get_template_directory_uri() . '/public/images/ckia-mark-nav.png' }}"
@@ -25,43 +23,36 @@
       {{-- Column 2: Read --}}
       <nav class="site-footer__col site-footer__col--nav" aria-label="Editorial sections">
         <h3 class="site-footer__col-heading">Read</h3>
-        @php
-          wp_nav_menu([
-            'theme_location' => 'footer_read',
-            'container'      => false,
-            'items_wrap'     => '<ul class="site-footer__nav-list" role="list">%3$s</ul>',
-            'walker'         => new \App\CkiaFooterNavWalker(),
-            'fallback_cb'    => false,
-          ]);
-        @endphp
+        <ul class="site-footer__nav-list" role="list">
+          <li><a href="/reviews" class="site-footer__nav-link">Reviews</a></li>
+          <li><a href="/tips" class="site-footer__nav-link">Tips</a></li>
+          <li><a href="/destinations" class="site-footer__nav-link">Destinations</a></li>
+          <li><a href="/lines" class="site-footer__nav-link">Cruise lines</a></li>
+          <li><a href="/newsletter" class="site-footer__nav-link">Newsletter</a></li>
+        </ul>
       </nav>
 
       {{-- Column 3: Voyana --}}
       <nav class="site-footer__col site-footer__col--nav" aria-label="Voyana product links">
         <h3 class="site-footer__col-heading">Voyana</h3>
-        @php
-          wp_nav_menu([
-            'theme_location' => 'footer_voyana',
-            'container'      => false,
-            'items_wrap'     => '<ul class="site-footer__nav-list" role="list">%3$s</ul>',
-            'walker'         => new \App\CkiaFooterNavWalker(),
-            'fallback_cb'    => false,
-          ]);
-        @endphp
+        <ul class="site-footer__nav-list" role="list">
+          <li><a href="#" class="site-footer__nav-link">Plan a cruise</a></li>
+          <li><a href="#" class="site-footer__nav-link">Track prices</a></li>
+          <li><a href="#" class="site-footer__nav-link">Flight monitor</a></li>
+          <li><a href="#" class="site-footer__nav-link">About Voyana</a></li>
+        </ul>
       </nav>
 
       {{-- Column 4: About --}}
       <nav class="site-footer__col site-footer__col--nav" aria-label="About CKIA">
         <h3 class="site-footer__col-heading">About</h3>
-        @php
-          wp_nav_menu([
-            'theme_location' => 'footer_about',
-            'container'      => false,
-            'items_wrap'     => '<ul class="site-footer__nav-list" role="list">%3$s</ul>',
-            'walker'         => new \App\CkiaFooterNavWalker(),
-            'fallback_cb'    => false,
-          ]);
-        @endphp
+        <ul class="site-footer__nav-list" role="list">
+          <li><a href="#" class="site-footer__nav-link">Editorial standards</a></li>
+          <li><a href="#" class="site-footer__nav-link">How we review</a></li>
+          <li><a href="#" class="site-footer__nav-link">Press</a></li>
+          <li><a href="#" class="site-footer__nav-link">Careers</a></li>
+          <li><a href="#" class="site-footer__nav-link">Contact</a></li>
+        </ul>
       </nav>
 
     </div>{{-- /.site-footer__grid --}}

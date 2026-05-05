@@ -85,9 +85,7 @@ add_action('after_setup_theme', function () {
      */
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'ckia'),
-        'footer_read'        => __('Footer — Read column', 'ckia'),
-        'footer_voyana'      => __('Footer — Voyana column', 'ckia'),
-        'footer_about'       => __('Footer — About column', 'ckia'),
+        'footer_navigation'  => __('Footer Navigation', 'ckia'),
     ]);
 
     /**
