@@ -8,9 +8,9 @@
   --}}
 
   @while(have_posts())
-  @php(the_post())
 
   @php
+    the_post();
     $post          = get_post();
     $authorId      = $post->post_author;
     $authorName    = get_the_author_meta('display_name', $authorId);
