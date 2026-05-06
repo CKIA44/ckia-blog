@@ -14,7 +14,7 @@ class CkiaNavWalker extends \Walker_Nav_Menu
 
     public function start_lvl(&$output, $depth = 0, $args = null)
     {
-        $output .= '<ul class="site-nav__dropdown" role="list">';
+        $output .= '<ul class="sub-menu site-nav__dropdown" role="list">';
     }
 
     public function end_lvl(&$output, $depth = 0, $args = null)
@@ -30,9 +30,9 @@ class CkiaNavWalker extends \Walker_Nav_Menu
         $has_children = in_array('menu-item-has-children', $classes, true);
 
         if ($depth === 0) {
-            $item_class = 'site-nav__item'
-                        . ($has_children ? ' site-nav__item--has-dropdown' : '')
-                        . ($is_active    ? ' site-nav__item--active'       : '');
+            $item_class = 'menu-item site-nav__item'
+                        . ($has_children ? ' menu-item-has-children site-nav__item--has-dropdown' : '')
+                        . ($is_active    ? ' current-menu-item site-nav__item--active'            : '');
             $link_class = 'site-nav__link' . ($is_active ? ' site-nav__link--active' : '');
             $aria       = $is_active ? ' aria-current="page"' : '';
             if ($has_children) {
@@ -40,7 +40,7 @@ class CkiaNavWalker extends \Walker_Nav_Menu
             }
             $output .= '<li class="' . esc_attr($item_class) . '">'
                      . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
-                     . esc_html($data_object->title)
+                     . wp_kses_post($data_object->title)
                      . ($has_children ? self::CHEVRON : '')
                      . '</a>';
         } else {
@@ -48,7 +48,7 @@ class CkiaNavWalker extends \Walker_Nav_Menu
             $aria       = $is_active ? ' aria-current="page"' : '';
             $output .= '<li>'
                      . '<a href="' . esc_url($data_object->url) . '" class="' . esc_attr($link_class) . '"' . $aria . '>'
-                     . esc_html($data_object->title)
+                     . wp_kses_post($data_object->title)
                      . '</a>';
         }
     }
@@ -65,7 +65,7 @@ class CkiaFooterNavWalker extends \Walker_Nav_Menu
     {
         $output .= '<li>'
                  . '<a href="' . esc_url($data_object->url) . '" class="site-footer__nav-link">'
-                 . esc_html($data_object->title)
+                 . wp_kses_post($data_object->title)
                  . '</a>';
     }
 
@@ -88,6 +88,7 @@ add_action('wp_head', function () {
   transition:transform 120ms cubic-bezier(.2,.8,.2,1)
 }
 .site-nav__list > .menu-item-has-children:hover > a::after,
+.site-nav__list > .menu-item-has-children.is-open > a::after,
 .site-nav__list > .menu-item-has-children:focus-within > a::after{transform:rotate(180deg)}
 .site-nav__list > .menu-item-has-children > .sub-menu{
   list-style:none;margin:0;padding:8px 0;
@@ -100,10 +101,8 @@ add_action('wp_head', function () {
   transition:opacity 120ms ease,visibility 120ms ease,transform 120ms ease;
   z-index:200
 }
-.site-nav__list > .menu-item-has-children > .sub-menu::before{
-  content:"";position:absolute;bottom:100%;left:0;right:0;height:14px
-}
 .site-nav__list > .menu-item-has-children:hover > .sub-menu,
+.site-nav__list > .menu-item-has-children.is-open > .sub-menu,
 .site-nav__list > .menu-item-has-children:focus-within > .sub-menu{
   opacity:1;visibility:visible;pointer-events:auto;
   transform:translateX(-50%) translateY(0)
@@ -162,6 +161,15 @@ add_action('wp_footer', function () {
   items.forEach(function(item){
     var link=item.querySelector(":scope > a");
     if(!link)return;
+    var hoverTimer=null;
+    item.addEventListener("mouseenter",function(){
+      clearTimeout(hoverTimer);
+      closeAll(item);
+      open(item);
+    });
+    item.addEventListener("mouseleave",function(){
+      hoverTimer=setTimeout(function(){close(item);},200);
+    });
     link.addEventListener("click",function(e){
       if(window.matchMedia("(hover:hover)").matches)return;
       var isOpen=item.classList.contains("is-open");
