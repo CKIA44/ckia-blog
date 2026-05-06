@@ -43,7 +43,8 @@
         <span class="sr-only">Search</span>
       </button>
 
-      <a href="#" class="btn btn--medium">Open Voyana</a>
+      @php $voyana_url = function_exists('get_field') ? get_field('voyana_url', 'option') : ''; @endphp
+      <a href="{{ $voyana_url ?: '#' }}" class="btn btn--medium"{{ $voyana_url ? ' target="_blank" rel="noopener"' : '' }}>Open Voyana</a>
 
     </div>
 

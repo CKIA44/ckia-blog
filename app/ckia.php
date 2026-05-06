@@ -470,9 +470,17 @@ add_action('acf/init', function () {
         'title'  => 'Voyana Integration',
         'fields' => [
             [
+                'key'          => 'field_voyana_url',
+                'label'        => 'Voyana URL',
+                'name'         => 'voyana_url',
+                'type'         => 'url',
+                'placeholder'  => 'https://voyana.com',
+                'instructions' => 'Destination for the "Open Voyana" button in the header.',
+            ],
+            [
                 'key'           => 'field_voyana_prominence',
                 'label'         => 'Voyana CTA prominence',
-                'name'          => 'voyana_prominence',
+                'name'         => 'voyana_prominence',
                 'type'          => 'select',
                 'choices'       => [
                     'subtle' => 'Subtle (hidden)',
