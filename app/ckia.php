@@ -123,6 +123,7 @@ add_action('wp_head', function () {
 .site-nav__list .sub-menu .menu-item-has-children:focus-within > .sub-menu{
   opacity:1;visibility:visible;pointer-events:auto
 }
+.article-layout--page{grid-template-columns:180px minmax(0,1fr)}
 @media(max-width:640px){
   .site-nav__list > .menu-item-has-children > a::after{display:none}
   .site-nav__list > .menu-item-has-children{flex-direction:column;align-items:flex-start}
