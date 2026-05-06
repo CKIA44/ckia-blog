@@ -100,9 +100,6 @@ add_action('wp_head', function () {
   transition:opacity 120ms ease,visibility 120ms ease,transform 120ms ease;
   z-index:200
 }
-.site-nav__list > .menu-item-has-children > .sub-menu::before{
-  content:'';position:absolute;bottom:100%;left:0;right:0;height:14px
-}
 .site-nav__list > .menu-item-has-children:hover > .sub-menu,
 .site-nav__list > .menu-item-has-children:focus-within > .sub-menu{
   opacity:1;visibility:visible;pointer-events:auto;
